@@ -1,35 +1,47 @@
 
 import React from "react";
 
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import ProductScreen from "./screens/ProductScreen";
 import HomeScreen from "./screens/HomeScreen";
+import CartScreen from "./screens/CartScreen";
+import { useSelector } from "react-redux";
 // import productssProductss  from "./productss";
 
 function App() {
+    const cart = useSelector(state => state.cart)
+    const {cartItems}=cart
+
   return (
-    <BrowserRouter>
+    
     <div className="grid_container">
     <header className="raw">
         <div>
-            <a className="brand" href="/">amazone</a>
+            <Link className="brand" href="/">Shoping </Link>
         </div>
         <div>
-            <a href="/cart">Cart</a>
-            <a href="/sign_in">sign in</a>
+            <Link to="/cart">Cart
+            {cartItems.length>0&&(
+                <span className="badge">{cartItems.length}</span>
+            )}
+            </Link>
+            <Link to="/sign_in">sign in</Link>
         </div>
     </header>
     
     <main>
-        <Route path="/product/:id"  component={ProductScreen}></Route>
-    <Route path="/" component={HomeScreen} exact></Route>  
+        <Switch>
+        <Route path="/cart/:id?" component={CartScreen}/>
+        <Route exact path="/product/:id"  component={ProductScreen}/>
+    <Route path="/product" component={HomeScreen} exact/>
+    </Switch>
     </main>
     <footer className="raw center">
         All right reserved
     </footer>
 
 </div>
-</BrowserRouter>
+
   );
 }
 
